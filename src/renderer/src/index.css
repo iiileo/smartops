@@ -11,13 +11,25 @@
 }
 
 .toolbar-btn-button-active::before {
-    /* 径向渐变内圆角 */
+    /* 左侧底部内凹圆角 */
     content: '';
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     bottom: 0;
-    left: -8px;
-    background: radial-gradient(circle, white 0%, white 100%);
-    border-radius: 100% 0 0 100%;
+    left: -12px;
+    background: radial-gradient(circle at bottom right, transparent 0%, transparent 70%, white 71%, white 100%);
+    rotate: 180deg;
+}
+
+.toolbar-btn-button-active::after {
+    /* 右侧底部内凹圆角 */
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 0;
+    right: -12px;
+    background: radial-gradient(circle at bottom left, transparent 0%, transparent 70%, white 0%, white 100%);
+    rotate: 180deg;
 }
