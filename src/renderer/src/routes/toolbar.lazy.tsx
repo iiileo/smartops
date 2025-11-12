@@ -1,4 +1,5 @@
 import { Tabbar } from '@renderer/components/tabbar'
+import WindowControls from '@renderer/components/WindowControls'
 import { cn } from '@renderer/utils/cn'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -23,6 +24,21 @@ function ToolbarComponent(): React.ReactNode {
         })}
       >
         <Tabbar />
+        {/* spacer */}
+        <div className="w-[90px]"></div>
+        {isWindow && (
+          <WindowControls
+            onMinimize={() => {
+              console.log('minimize')
+            }}
+            onMaximize={() => {
+              console.log('maximize')
+            }}
+            onClose={() => {
+              console.log('close')
+            }}
+          />
+        )}
       </div>
     )
   }

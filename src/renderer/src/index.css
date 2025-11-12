@@ -6,7 +6,8 @@
     user-select: none;
 }
 
-.toolbar-tab-button {
+.toolbar-tab-button,
+.window-controls {
     -webkit-app-region: no-drag;
 }
 
