@@ -9,3 +9,15 @@
 .toolbar-tab-button {
     -webkit-app-region: no-drag;
 }
+
+.toolbar-btn-button-active::before {
+    /* 径向渐变内圆角 */
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    bottom: 0;
+    left: -8px;
+    background: radial-gradient(circle, white 0%, white 100%);
+    border-radius: 100% 0 0 100%;
+}
