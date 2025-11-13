@@ -14,8 +14,8 @@ const Tab: React.FC<TabProps> = ({ tab, selected, arrowClose = true, onClick, on
   return (
     <div
       className={cn('h-full toolbar-tab-button pt-[4px] box-border', {
-        'max-w-[160px] flex-1': tab.id !== 'default',
-        'w-fit': tab.id === 'default'
+        'max-w-[160px] flex-1 min-w-0': tab.id !== 'default',
+        'w-fit shrink-0': tab.id === 'default'
       })}
       onClick={onClick}
     >
