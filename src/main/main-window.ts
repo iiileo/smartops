@@ -7,6 +7,8 @@ import { createToolbarView } from './toolbar-view'
 import { route } from './utils'
 
 let mainWindow: BaseWindow | null = null
+let isQuitting = false
+let isAppActivateListenerRegistered = false
 
 const BASE_MIN_WIDTH = 1000
 const BASE_MIN_HEIGHT = 700
@@ -50,11 +52,26 @@ export async function initializeMainWindow(): Promise<void> {
   // 添加 content view
   // todo: 123
 
-  mainWindow.on('close', () => {
+  mainWindow.on('close', (event) => {
     console.log('close')
-    // mainWindow 关闭
-    // mainWindow?.close()
-    closeMainWindow(mainWindow!)
+    // 在 macOS 上，关闭窗口时隐藏而不是销毁
+    if (process.platform === 'darwin' && !isQuitting) {
+      event.preventDefault()
+      // 如果窗口处于全屏状态，先退出全屏再隐藏
+      if (mainWindow?.isFullScreen()) {
+        // 监听退出全屏事件，退出后再隐藏窗口
+        const handleLeaveFullScreen = (): void => {
+          mainWindow?.hide()
+          mainWindow?.removeListener('leave-full-screen', handleLeaveFullScreen)
+        }
+        mainWindow.once('leave-full-screen', handleLeaveFullScreen)
+        mainWindow.setFullScreen(false)
+      } else {
+        mainWindow?.hide()
+      }
+    } else {
+      closeMainWindow(mainWindow!)
+    }
   })
 
   mainWindow.on('maximize', () => {
@@ -88,15 +105,27 @@ export async function initializeMainWindow(): Promise<void> {
 }
 
 function setupMainWindowEventHandlers(): void {
-  app.on('activate', () => {
-    // 如果窗口已经存在
-    if (mainWindow !== null) {
-      showMainWindow()
-      return
-    }
-    console.log('activate main window')
-    initializeMainWindow()
-  })
+  // 只注册一次 app 级别的事件监听器
+  if (!isAppActivateListenerRegistered) {
+    // macOS 上点击 Dock 图标时重新显示窗口
+    app.on('activate', () => {
+      // 如果窗口已经存在但被隐藏，显示它
+      if (mainWindow !== null) {
+        showMainWindow()
+        return
+      }
+      // 如果窗口已经被销毁，重新创建
+      console.log('activate main window')
+      initializeMainWindow()
+    })
+
+    // 应用退出前设置标志
+    app.on('before-quit', () => {
+      isQuitting = true
+    })
+
+    isAppActivateListenerRegistered = true
+  }
 }
 
 export function showMainWindow(): void {
@@ -137,6 +166,6 @@ function closeMainWindow(mainWin: BaseWindow): void {
     mainWin.contentView.removeChildView(selectedTab)
   }
   // 关闭所有 tabs
-  mainWin.close()
+  mainWin.destroy()
   mainWindow = null
 }
