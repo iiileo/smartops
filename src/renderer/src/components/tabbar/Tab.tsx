@@ -14,18 +14,18 @@ const Tab: React.FC<TabProps> = ({ tab, selected, arrowClose = true, onClick, on
   return (
     <div
       className={cn('h-full toolbar-tab-button pt-[4px] box-border', {
-        'max-w-[160px] flex-1 min-w-0': tab.id !== 'default',
-        'w-fit shrink-0': tab.id === 'default'
+        'flex-1 min-w-0 max-w-[160px]': tab.id !== 'default',
+        'w-fit': tab.id === 'default'
       })}
       onClick={onClick}
     >
       <div
-        className={cn('h-[36px] pb-[6px] flex items-center px-[4px] box-border rounded-t-lg relative w-full', {
+        className={cn('h-[36px] pb-[6px] flex items-center box-border rounded-t-lg relative w-full', {
           'bg-white toolbar-btn-button-active': selected
         })}
       >
         <div
-          className={cn('flex h-[28px] items-center gap-[4px] px-[10px] py-[4px] rounded-[6px] box-border w-full ', {
+          className={cn('flex h-[28px] items-center gap-[4px] px-[8px] py-[4px] rounded-[6px] box-border w-full ', {
             'hover:bg-blue-200': !selected
           })}
         >
