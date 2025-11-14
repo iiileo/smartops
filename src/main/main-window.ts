@@ -1,8 +1,8 @@
 import { is } from '@electron-toolkit/utils'
 import { app, BaseWindow } from 'electron'
+import { addTab } from './tab'
 import { initTabIpcHandlers } from './tab-handles'
 import { createToolbarView } from './toolbar-view'
-import { addTab } from './tab'
 import { route } from './utils'
 
 let mainWindow: BaseWindow | null = null
@@ -28,7 +28,10 @@ export async function initializeMainWindow(): Promise<void> {
       y: 14
     }
   })
+
+  // todo: 初始化ipc
   initTabIpcHandlers()
+  // 窗口改变
 
   setupMainWindowEventHandlers()
 
@@ -54,7 +57,32 @@ export async function initializeMainWindow(): Promise<void> {
     mainWindow = null
   })
 
-  mainWindow.setTitle('SmartOps')
+  mainWindow.on('maximize', () => {
+    console.log('maximize')
+    toolbarView.webContents.send('window:maximize')
+  })
+  mainWindow.on('unmaximize', () => {
+    console.log('unmaximize')
+    toolbarView.webContents.send('window:unmaximize')
+  })
+  mainWindow.on('minimize', () => {
+    console.log('minimize')
+    toolbarView.webContents.send('window:minimize')
+  })
+  mainWindow.on('restore', () => {
+    console.log('restore')
+    toolbarView.webContents.send('window:restore')
+  })
+  mainWindow.on('enter-full-screen', () => {
+    console.log('enter-full-screen')
+    toolbarView.webContents.send('window:enterFullScreen')
+  })
+  mainWindow.on('leave-full-screen', () => {
+    console.log('leave-full-screen')
+    toolbarView.webContents.send('window:leaveFullScreen')
+  })
+
+  mainWindow.setTitle('')
 
   showMainWindow()
 

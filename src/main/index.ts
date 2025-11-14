@@ -13,8 +13,6 @@ app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.iiileo.smartops')
   // IPC test
 
-  // todo: 初始化ipc
-
   initializeMainWindow()
 })
 
