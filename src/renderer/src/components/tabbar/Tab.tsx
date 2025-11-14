@@ -20,12 +20,12 @@ const Tab: React.FC<TabProps> = ({ tab, selected, arrowClose = true, onClick, on
       onClick={onClick}
     >
       <div
-        className={cn('h-[36px] pb-[6px] flex items-center px-[8px] box-border rounded-t-lg relative w-full', {
+        className={cn('h-[36px] pb-[6px] flex items-center box-border rounded-t-lg relative w-full', {
           'bg-white toolbar-btn-button-active': selected
         })}
       >
         <div
-          className={cn('flex h-[28px] items-center gap-[4px] px-[4px] py-[4px] rounded-[6px] box-border w-full ', {
+          className={cn('flex h-[28px] items-center gap-[4px] px-[8px] py-[4px] rounded-[6px] box-border w-full ', {
             'hover:bg-blue-200': !selected
           })}
         >
