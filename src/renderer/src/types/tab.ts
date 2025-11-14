@@ -1,5 +1,5 @@
 export interface Tab {
-  id: string | number
+  id: number
   icon: string
   title: string
   closeable: boolean

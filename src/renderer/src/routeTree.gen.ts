@@ -13,32 +13,42 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 
 const ToolbarLazyRouteImport = createFileRoute('/toolbar')()
+const DefaultLazyRouteImport = createFileRoute('/default')()
 
 const ToolbarLazyRoute = ToolbarLazyRouteImport.update({
   id: '/toolbar',
   path: '/toolbar',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/toolbar.lazy').then((d) => d.Route))
+const DefaultLazyRoute = DefaultLazyRouteImport.update({
+  id: '/default',
+  path: '/default',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/default.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
+  '/default': typeof DefaultLazyRoute
   '/toolbar': typeof ToolbarLazyRoute
 }
 export interface FileRoutesByTo {
+  '/default': typeof DefaultLazyRoute
   '/toolbar': typeof ToolbarLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/default': typeof DefaultLazyRoute
   '/toolbar': typeof ToolbarLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/toolbar'
+  fullPaths: '/default' | '/toolbar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/toolbar'
-  id: '__root__' | '/toolbar'
+  to: '/default' | '/toolbar'
+  id: '__root__' | '/default' | '/toolbar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  DefaultLazyRoute: typeof DefaultLazyRoute
   ToolbarLazyRoute: typeof ToolbarLazyRoute
 }
 
@@ -51,10 +61,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolbarLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/default': {
+      id: '/default'
+      path: '/default'
+      fullPath: '/default'
+      preLoaderRoute: typeof DefaultLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  DefaultLazyRoute: DefaultLazyRoute,
   ToolbarLazyRoute: ToolbarLazyRoute,
 }
 export const routeTree = rootRouteImport

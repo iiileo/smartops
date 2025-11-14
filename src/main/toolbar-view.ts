@@ -1,6 +1,6 @@
 import { WebContentsView } from 'electron'
 import path from 'path'
-import { getBackgroundStyle, getMainWindow } from './main-window'
+import { getBackgroundColor, getMainWindow } from './main-window'
 import { route } from './utils'
 
 let toolbarView: WebContentsView | null = null
@@ -26,7 +26,7 @@ export function createToolbarView(): Promise<WebContentsView | null> {
     })
 
     // 设置 view
-    toolbarView.setBackgroundColor(getBackgroundStyle())
+    toolbarView.setBackgroundColor(getBackgroundColor())
     toolbarView.setBounds({
       x: 0,
       y: 0,
@@ -59,4 +59,25 @@ export function createToolbarView(): Promise<WebContentsView | null> {
     // 加载失败返回 null
     toolbarView.webContents.on('did-fail-load', () => resolve(null))
   })
+}
+
+export function setToolbarViewBounds(): void {
+  const mainWindow = getMainWindow()
+  if (mainWindow === null) {
+    return
+  }
+  const { width } = mainWindow.getBounds()
+  if (toolbarView === null) {
+    return
+  }
+  toolbarView.setBounds({
+    x: 0,
+    y: 0,
+    width: width,
+    height: TOOLBAR_VIEW_HEIGHT
+  })
+}
+
+export function getToolbarViewHeight(): number {
+  return TOOLBAR_VIEW_HEIGHT
 }

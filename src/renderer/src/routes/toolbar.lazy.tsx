@@ -16,9 +16,7 @@ function ToolbarComponent(): React.ReactNode {
 
   const Toolbar = (): React.ReactNode => {
     return (
-      <div
-        className={cn('h-full w-full bg-blue-100 flex items-center')}
-      >
+      <div className={cn('h-full w-full bg-blue-100 flex items-center')}>
         <Tabbar />
         {/* spacer */}
         <div className="w-[90px]"></div>

@@ -1,6 +1,9 @@
 import { is } from '@electron-toolkit/utils'
 import { app, BaseWindow } from 'electron'
+import { initTabIpcHandlers } from './tab-handles'
 import { createToolbarView } from './toolbar-view'
+import { addTab } from './tab'
+import { route } from './utils'
 
 let mainWindow: BaseWindow | null = null
 
@@ -25,10 +28,16 @@ export async function initializeMainWindow(): Promise<void> {
       y: 14
     }
   })
+  initTabIpcHandlers()
 
   setupMainWindowEventHandlers()
 
   const toolbarView = await createToolbarView()
+  // default atb
+  const defaultTabView = await addTab(route('/default'))
+  if (defaultTabView === null) {
+    throw new Error('Failed to create default tab view')
+  }
   if (toolbarView === null) {
     throw new Error('Failed to create toolbar view')
   }

@@ -1,23 +1,25 @@
 import { Tab } from '@renderer/types/tab'
 import { produce } from 'immer'
 import { create } from 'zustand'
-import { v4 as uuidv4 } from 'uuid'
 
 interface TabState {
   tabs: Tab[]
   selectedTab: Tab | null
-  addTab: () => void
-  closeTab: (tabId: string | number) => void
-  setSelectedTab: (tabId: string | number) => void
+  addTab: () => Promise<void>
+  closeTab: (tabId: number) => void
+  setSelectedTab: (tabId: number) => void
 }
 
-const defaultTab: Tab = { id: 'default', icon: 'home', title: '工作台', closeable: false, meta: {} }
+const defaultTab: Tab = { id: -1, icon: 'home', title: '工作台', closeable: false, meta: {} }
 
 const useTabStore = create<TabState>((set) => ({
   tabs: [defaultTab],
   selectedTab: defaultTab,
-  addTab: () => {
-    const id = uuidv4()
+  addTab: async () => {
+    const id = await window.tabs.addTab('https://www.google.com')
+    if (id === null) {
+      return
+    }
     const newTab: Tab = { id, icon: 'home', title: 'New Tab', closeable: true, meta: {} }
     set(
       produce((draft) => {
@@ -26,7 +28,8 @@ const useTabStore = create<TabState>((set) => ({
       })
     )
   },
-  closeTab: (tabId: string | number) => {
+  closeTab: (tabId: number) => {
+    window.tabs.closeTab(tabId)
     set(
       produce((draft) => {
         const index = draft.tabs.findIndex((tab: Tab) => tab.id === tabId)
@@ -42,7 +45,8 @@ const useTabStore = create<TabState>((set) => ({
       })
     )
   },
-  setSelectedTab: (tabId: string | number) => {
+  setSelectedTab: (tabId: number) => {
+    window.tabs.setSelectedTab(tabId)
     set(
       produce((draft) => {
         const index = draft.tabs.findIndex((tab: Tab) => tab.id === tabId)
