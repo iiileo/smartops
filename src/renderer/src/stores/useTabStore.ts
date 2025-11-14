@@ -2,6 +2,20 @@ import { Tab } from '@renderer/types/tab'
 import { produce } from 'immer'
 import { create } from 'zustand'
 
+const urls = [
+  'https://b2bwork.baidu.com',
+  'https://www.douyin.com',
+  'https://www.github.com',
+  'https://www.bilibili.com',
+  'https://www.iqiyi.com',
+  'https://www.youku.com',
+  'https://www.iqiyi.com',
+  'https://www.youku.com',
+  'https://www.qq.com',
+  'https://www.taobao.com',
+  'https://www.jd.com'
+]
+
 interface TabState {
   tabs: Tab[]
   selectedTab: Tab | null
@@ -22,7 +36,8 @@ const useTabStore = create<TabState>((set) => ({
   tabs: [defaultTab],
   selectedTab: defaultTab,
   addTab: async () => {
-    const id = await window.tabs.addTab('https://b2bwork.baidu.com')
+    const randomUrl = urls[Math.floor(Math.random() * urls.length)]
+    const id = await window.tabs.addTab(randomUrl)
     if (id === null) {
       return
     }
