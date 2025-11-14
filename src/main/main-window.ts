@@ -6,7 +6,7 @@ let mainWindow: BaseWindow | null = null
 
 const BASE_MIN_WIDTH = 1000
 const BASE_MIN_HEIGHT = 700
-const contentBackground = '#ffffff'
+const contentBackgroundColor = '#ffffff'
 
 // 初始化 main window
 export async function initializeMainWindow(): Promise<void> {
@@ -90,6 +90,6 @@ export function getMainWindow(): BaseWindow {
 }
 
 // 获取默认的页面背景色
-export function getBackgroundStyle(): string {
-  return contentBackground
+export function getBackgroundColor(): string {
+  return contentBackgroundColor
 }
