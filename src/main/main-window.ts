@@ -1,7 +1,8 @@
 import { is } from '@electron-toolkit/utils'
 import { app, BaseWindow } from 'electron'
-import { addTab } from './tab'
-import { initTabIpcHandlers } from './tab-handles'
+import { registerTabsIpcHandlers } from './ipc/tabs'
+import { registerWindowIpcHandlers } from './ipc/window'
+import { addTab, getSelectedTab, getTabs } from './tabs'
 import { createToolbarView } from './toolbar-view'
 import { route } from './utils'
 
@@ -30,9 +31,9 @@ export async function initializeMainWindow(): Promise<void> {
   })
 
   // todo: 初始化ipc
-  initTabIpcHandlers()
+  registerTabsIpcHandlers()
+  registerWindowIpcHandlers(mainWindow)
   // 窗口改变
-
   setupMainWindowEventHandlers()
 
   const toolbarView = await createToolbarView()
@@ -53,32 +54,26 @@ export async function initializeMainWindow(): Promise<void> {
     console.log('close')
     // mainWindow 关闭
     // mainWindow?.close()
-    mainWindow?.destroy()
-    mainWindow = null
+    closeMainWindow(mainWindow!)
   })
 
   mainWindow.on('maximize', () => {
-    console.log('maximize')
     toolbarView.webContents.send('window:maximize')
   })
   mainWindow.on('unmaximize', () => {
-    console.log('unmaximize')
     toolbarView.webContents.send('window:unmaximize')
   })
   mainWindow.on('minimize', () => {
-    console.log('minimize')
     toolbarView.webContents.send('window:minimize')
   })
   mainWindow.on('restore', () => {
-    console.log('restore')
+    mainWindow?.focus()
     toolbarView.webContents.send('window:restore')
   })
   mainWindow.on('enter-full-screen', () => {
-    console.log('enter-full-screen')
     toolbarView.webContents.send('window:enterFullScreen')
   })
   mainWindow.on('leave-full-screen', () => {
-    console.log('leave-full-screen')
     toolbarView.webContents.send('window:leaveFullScreen')
   })
 
@@ -129,4 +124,19 @@ export function getMainWindow(): BaseWindow {
 // 获取默认的页面背景色
 export function getBackgroundColor(): string {
   return contentBackgroundColor
+}
+
+function closeMainWindow(mainWin: BaseWindow): void {
+  // 关闭所有窗口
+  const tabs = getTabs()
+  tabs.forEach((tab) => {
+    tab.webContents.close()
+  })
+  const selectedTab = getSelectedTab()
+  if (selectedTab) {
+    mainWin.contentView.removeChildView(selectedTab)
+  }
+  // 关闭所有 tabs
+  mainWin.close()
+  mainWindow = null
 }

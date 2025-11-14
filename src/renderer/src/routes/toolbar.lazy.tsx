@@ -22,19 +22,7 @@ function ToolbarComponent(): React.ReactNode {
         <Tabbar />
         {/* spacer */}
         <div className="w-[90px]"></div>
-        {isWindow && (
-          <WindowControls
-            onMinimize={() => {
-              console.log('minimize')
-            }}
-            onMaximize={() => {
-              console.log('maximize')
-            }}
-            onClose={() => {
-              console.log('close')
-            }}
-          />
-        )}
+        {isWindow && <WindowControls />}
       </div>
     )
   }

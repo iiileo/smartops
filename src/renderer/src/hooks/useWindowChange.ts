@@ -7,38 +7,38 @@ export const useWindowChange = (): void => {
   const setIsMinimized = useWindowStore((state) => state.setIsMinimized)
   // 监听窗口最大化
   useEffect(() => {
-    window.tabs.onMinimize(() => {
+    window.win.onMinimize(() => {
       console.log('minimize')
       setIsMinimized(true)
     })
-    window.tabs.onRestore(() => {
+    window.win.onRestore(() => {
       console.log('restore')
       setIsMinimized(false)
     })
-    window.tabs.onMaximize(() => {
+    window.win.onMaximize(() => {
       console.log('maximize')
       setIsMaximized(true)
     })
-    window.tabs.onUnmaximize(() => {
+    window.win.onUnmaximize(() => {
       console.log('unmaximize')
       setIsMaximized(false)
     })
-    window.tabs.onEnterFullScreen(() => {
+    window.win.onEnterFullScreen(() => {
       console.log('enter-full-screen')
       setIsFullScreen(true)
     })
-    window.tabs.onLeaveFullScreen(() => {
+    window.win.onLeaveFullScreen(() => {
       console.log('leave-full-screen')
       setIsFullScreen(false)
     })
 
     return () => {
-      window.tabs.offMinimize()
-      window.tabs.offRestore()
-      window.tabs.offMaximize()
-      window.tabs.offUnmaximize()
-      window.tabs.offEnterFullScreen()
-      window.tabs.offLeaveFullScreen()
+      window.win.offMinimize()
+      window.win.offRestore()
+      window.win.offMaximize()
+      window.win.offUnmaximize()
+      window.win.offEnterFullScreen()
+      window.win.offLeaveFullScreen()
     }
   }, [setIsMinimized, setIsMaximized, setIsFullScreen])
 }

@@ -115,3 +115,15 @@ export function closeTab(tabId: number): void {
   view.webContents.close()
   tabs.splice(tabs.indexOf(view), 1)
 }
+
+export function getTabs(): WebContentsView[] {
+  return tabs
+}
+
+export function getSelectedTab(): WebContentsView | null {
+  return selectedTab
+}
+
+export function clearSelectedTab(): void {
+  selectedTab = null
+}
