@@ -61,7 +61,8 @@ export function setSelectedTab(tabId: number): void {
   }
 
   function setViewBounds(): void {
-    const { width } = mainWindow.getBounds()
+    // 获取可用区域宽度
+    const { width } = mainWindow.getContentBounds()
     if (view === undefined) {
       return
     }

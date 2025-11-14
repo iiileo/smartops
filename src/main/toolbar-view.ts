@@ -30,13 +30,13 @@ export function createToolbarView(): Promise<WebContentsView | null> {
     toolbarView.setBounds({
       x: 0,
       y: 0,
-      width: mainWindow.getBounds().width,
+      width: mainWindow.getContentBounds().width,
       height: TOOLBAR_VIEW_HEIGHT
     })
 
     // 监听 resize
     mainWindow.on('resize', () => {
-      const { width } = mainWindow.getBounds()
+      const { width } = mainWindow.getContentBounds()
       if (toolbarView === null) {
         return
       }
@@ -66,7 +66,7 @@ export function setToolbarViewBounds(): void {
   if (mainWindow === null) {
     return
   }
-  const { width } = mainWindow.getBounds()
+  const { width } = mainWindow.getContentBounds()
   if (toolbarView === null) {
     return
   }
