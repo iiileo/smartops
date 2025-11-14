@@ -1,5 +1,5 @@
 import { is } from '@electron-toolkit/utils'
-import { app, BaseWindow } from 'electron'
+import { app, BaseWindow, screen } from 'electron'
 import { registerTabsIpcHandlers } from './ipc/tabs'
 import { registerWindowIpcHandlers } from './ipc/window'
 import { addTab, getSelectedTab, getTabs } from './tabs'
@@ -75,6 +75,13 @@ export async function initializeMainWindow(): Promise<void> {
   })
 
   mainWindow.on('maximize', () => {
+    const workArea = screen.getPrimaryDisplay().workArea // 可用区域（不会被任务栏覆盖）
+    mainWindow?.setBounds({
+      x: workArea.x,
+      y: workArea.y,
+      width: workArea.width,
+      height: workArea.height
+    })
     toolbarView.webContents.send('window:maximize')
   })
   mainWindow.on('unmaximize', () => {
