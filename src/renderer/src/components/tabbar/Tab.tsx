@@ -1,6 +1,6 @@
 import type { Tab } from '@renderer/types/tab'
 import { cn } from '@renderer/utils/cn'
-import { LayoutGrid, X } from 'lucide-react'
+import { LayoutGrid, Loader2, X } from 'lucide-react'
 
 interface TabProps {
   tab: Tab
@@ -29,7 +29,15 @@ const Tab: React.FC<TabProps> = ({ tab, selected, arrowClose = true, onClick, on
             'hover:bg-blue-200': !selected
           })}
         >
-          <LayoutGrid size={14} />
+          {tab.id === -1 ? (
+            <LayoutGrid size={14} />
+          ) : tab.loading ? (
+            <Loader2 size={14} />
+          ) : tab.favicon ? (
+            <img src={tab.favicon} alt="favicon" className="w-[14px] h-[14px]" />
+          ) : (
+            <LayoutGrid size={14} />
+          )}
           <span className=" flex-1 text-xs text-black line-clamp-1">{tab.title}</span>
           {arrowClose && (
             <div

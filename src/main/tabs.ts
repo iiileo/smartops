@@ -1,8 +1,8 @@
-import { WebContentsView } from 'electron'
+import { shell, WebContentsView } from 'electron'
 import { join } from 'path'
 import { getBackgroundColor, getMainWindow } from './main-window'
-import { route } from './utils'
-import { getToolbarViewHeight, setToolbarViewBounds } from './toolbar-view'
+import { getToolbarView, getToolbarViewHeight, setToolbarViewBounds } from './toolbar-view'
+import { faviconToBase64, route } from './utils'
 
 const tabs: WebContentsView[] = []
 let selectedTab: WebContentsView | null = null
@@ -16,11 +16,45 @@ export async function createContentTab(url: string): Promise<WebContentsView | n
       }
     })
 
+    const toolbarView = getToolbarView()
+
+    // 涉及打开 就使用外部浏览器
+    view.webContents.setWindowOpenHandler((details) => {
+      console.log('setWindowOpenHandler', details.url)
+      shell.openExternal(details.url)
+      return { action: 'deny' }
+    })
+
     view.webContents.on('did-finish-load', () => {
       resolve(view)
     })
     view.webContents.on('did-fail-load', () => {
       resolve(null)
+    })
+    view.webContents.on('did-start-loading', () => {
+      toolbarView?.webContents.send('tab:loadingChange', view.webContents.id, true)
+    })
+    view.webContents.on('did-stop-loading', () => {
+      toolbarView?.webContents.send('tab:loadingChange', view.webContents.id, false)
+    })
+    view.webContents.on('did-navigate', (_, url) => {
+      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+    })
+    view.webContents.on('did-navigate-in-page', (_, url) => {
+      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+    })
+    view.webContents.on('page-title-updated', (_, title) => {
+      toolbarView?.webContents.send('tab:titleChange', view.webContents.id, title)
+    })
+    view.webContents.on('page-favicon-updated', async (_, favicon) => {
+      console.log('page-favicon-updated', favicon)
+      if (favicon.length > 0) {
+        const url = favicon[favicon.length - 1]
+        const base64 = await faviconToBase64(url)
+        toolbarView?.webContents.send('tab:faviconChange', view.webContents.id, base64)
+      } else {
+        toolbarView?.webContents.send('tab:faviconChange', view.webContents.id, '')
+      }
     })
 
     // todo: 监听 view的事件传给 toolbar 比如 标题改变 url改变 title改变

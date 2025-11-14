@@ -81,3 +81,7 @@ export function setToolbarViewBounds(): void {
 export function getToolbarViewHeight(): number {
   return TOOLBAR_VIEW_HEIGHT
 }
+
+export function getToolbarView(): WebContentsView | null {
+  return toolbarView
+}

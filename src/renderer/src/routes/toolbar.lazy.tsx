@@ -1,5 +1,6 @@
 import { Tabbar } from '@renderer/components/tabbar'
 import WindowControls from '@renderer/components/WindowControls'
+import useTabChange from '@renderer/hooks/useTabChange'
 import { useWindowChange } from '@renderer/hooks/useWindowChange'
 import { cn } from '@renderer/utils/cn'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -11,6 +12,7 @@ export const Route = createLazyFileRoute('/toolbar')({
 
 function ToolbarComponent(): React.ReactNode {
   useWindowChange()
+  useTabChange()
   // const isMacOs = process.platform === 'darwin'
   const [platform] = useState(window.electron.process.platform)
 
