@@ -12,16 +12,12 @@ function ToolbarComponent(): React.ReactNode {
   // const isMacOs = process.platform === 'darwin'
   const [platform] = useState(window.electron.process.platform)
 
-  const isMacOs = platform === 'darwin'
   const isWindow = platform === 'win32'
 
   const Toolbar = (): React.ReactNode => {
     return (
       <div
-        className={cn('h-full w-full bg-blue-100 flex items-center', {
-          'pl-[90px]': isMacOs,
-          'pl-4': isWindow
-        })}
+        className={cn('h-full w-full bg-blue-100 flex items-center')}
       >
         <Tabbar />
         {/* spacer */}
