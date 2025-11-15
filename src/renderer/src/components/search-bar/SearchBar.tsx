@@ -15,7 +15,7 @@ const SearchBar: React.FC = (): React.ReactElement => {
 
   return (
     <form
-      className="h-full flex-1 bg-blue-50 flex items-center gap-[4px] box-border px-[12px] rounded-full"
+      className="h-full flex-1 bg-blue-50 flex items-center gap-[4px] box-border px-[12px] rounded"
       onSubmit={handleSubmit}
     >
       <div className="h-[18px] flex items-center justify-center bg-blue-200 border border-blue-300 rounded">
@@ -23,7 +23,7 @@ const SearchBar: React.FC = (): React.ReactElement => {
       </div>
       <input
         type="text"
-        className="outline-none flex-1 text-sm text-gray-900"
+        className="outline-none flex-1 text-sm text-gray-900 placeholder:text-gray-400 placeholder:text-xs"
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value)
@@ -34,6 +34,8 @@ const SearchBar: React.FC = (): React.ReactElement => {
         onBlur={() => {
           setSearchFocused(false)
         }}
+        disabled={selectedTab?.id === -1}
+        placeholder="搜索或输入网址"
       />
     </form>
   )
