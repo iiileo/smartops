@@ -14,10 +14,16 @@ const SearchBar: React.FC = (): React.ReactElement => {
   }
 
   return (
-    <form className="h-full flex-1" onSubmit={handleSubmit}>
+    <form
+      className="h-full flex-1 bg-blue-50 flex items-center gap-[4px] box-border px-[12px] rounded-full"
+      onSubmit={handleSubmit}
+    >
+      <div className="h-[18px] flex items-center justify-center bg-blue-200 border border-blue-300 rounded">
+        <span className="text-xs text-blue-500 px-[4px]">安全</span>
+      </div>
       <input
         type="text"
-        className="w-full outline-none border flex-1 px-[12px] rounded-full bg-gray-100 border-gray-100 text-sm text-gray-700"
+        className="outline-none flex-1 text-sm text-gray-900"
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value)
