@@ -2,7 +2,7 @@ import { createHashHistory, createRouter, RouterProvider } from '@tanstack/react
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { routeTree } from './routeTree.gen'
-
+import '@vscode/codicons/dist/codicon.css'
 import './index.css'
 
 // Set up a Router instance

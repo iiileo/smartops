@@ -17,16 +17,23 @@ const urls = [
 ]
 
 interface TabState {
+  // 搜索框
+  searchFocused: boolean
+  setSearchFocused: (focused: boolean) => void
+  searchValue: string
+  setSearchValue: (value: string) => void
+
+  // tab 操作
   tabs: Tab[]
   selectedTab: Tab | null
   addTab: () => Promise<void>
   closeTab: (tabId: number) => void
   setSelectedTab: (tabId: number) => void
-
   refreshTab: (tabId: number) => void
   goBack: (tabId: number) => void
   goForward: (tabId: number) => void
 
+  // 设置状态，监听主线程的操作
   setTabUrl: (tabId: number, url: string) => void
   setTabFavicon: (tabId: number, favicon: string) => void
   setTabTitle: (tabId: number, title: string) => void
@@ -37,6 +44,23 @@ interface TabState {
 const defaultTab: Tab = { id: -1, title: '工作台', closeable: false, meta: {} }
 
 const useTabStore = create<TabState>((set) => ({
+  searchFocused: false,
+  setSearchFocused: (focused: boolean) => {
+    set(
+      produce((draft) => {
+        draft.searchFocused = focused
+      })
+    )
+  },
+  searchValue: '',
+  setSearchValue: (value: string) => {
+    set(
+      produce((draft) => {
+        draft.searchValue = value
+      })
+    )
+  },
+
   tabs: [defaultTab],
   selectedTab: defaultTab,
   addTab: async () => {
@@ -50,6 +74,7 @@ const useTabStore = create<TabState>((set) => ({
       produce((draft) => {
         draft.tabs.push(newTab)
         draft.selectedTab = newTab
+        draft.searchValue = newTab.url || ''
       })
     )
   },
@@ -61,11 +86,14 @@ const useTabStore = create<TabState>((set) => ({
         // 1、如果 tabId === 当前选中的 且 右侧还有，就选中当前关闭右侧的
         // 2、如果 tabId === 当前选中的 且 右侧没有，就选中当前关闭左侧的
         // 3、如果 tabId !== 当前选中的 就不切换 selectedTab
+        let tab: Tab | null = null
         if (tabId === draft.selectedTab?.id && index < draft.tabs.length - 1) {
-          draft.selectedTab = draft.tabs[index + 1] || defaultTab
+          tab = draft.tabs[index + 1] || defaultTab
         } else if (tabId === draft.selectedTab?.id && index === draft.tabs.length - 1) {
-          draft.selectedTab = draft.tabs[index - 1] || defaultTab
+          tab = draft.tabs[index - 1] || defaultTab
         }
+        draft.selectedTab = tab
+        draft.searchValue = tab?.url || ''
         draft.tabs.splice(index, 1)
       })
     )
@@ -77,7 +105,9 @@ const useTabStore = create<TabState>((set) => ({
         const index = draft.tabs.findIndex((tab: Tab) => tab.id === tabId)
         if (index !== -1) {
           draft.selectedTab = draft.tabs[index]
+          draft.searchValue = draft.tabs[index].url || ''
         } else {
+          draft.searchValue = ''
           draft.selectedTab = draft.tabs[0]
         }
       })
@@ -101,6 +131,7 @@ const useTabStore = create<TabState>((set) => ({
         if (index !== -1) {
           draft.tabs[index].url = url
           draft.selectedTab = draft.tabs[index]
+          draft.searchValue = url
         }
       })
     )

@@ -25,6 +25,7 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-router": "^1.135.2",
+    "@vscode/codicons": "^0.0.42",
     "clsx": "^2.1.1",
     "electron-updater": "^6.3.9",
     "immer": "^10.2.0",
