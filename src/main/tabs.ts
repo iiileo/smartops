@@ -36,14 +36,32 @@ export async function createContentTab(url: string): Promise<WebContentsView | n
     view.webContents.on('did-navigate', (_, url) => {
       console.log('did-navigate', url)
       toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+      toolbarView?.webContents.send(
+        'tab:canBackAndForwardChange',
+        view.webContents.id,
+        view.webContents.navigationHistory.canGoBack(),
+        view.webContents.navigationHistory.canGoForward()
+      )
     })
     view.webContents.on('did-navigate-in-page', (_, url) => {
       console.log('did-navigate-in-page', url)
       toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+      toolbarView?.webContents.send(
+        'tab:canBackAndForwardChange',
+        view.webContents.id,
+        view.webContents.navigationHistory.canGoBack(),
+        view.webContents.navigationHistory.canGoForward()
+      )
     })
     view.webContents.on('will-navigate', (_, url) => {
       console.log('will-navigate', url)
       toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+      toolbarView?.webContents.send(
+        'tab:canBackAndForwardChange',
+        view.webContents.id,
+        view.webContents.navigationHistory.canGoBack(),
+        view.webContents.navigationHistory.canGoForward()
+      )
     })
     // =====
     // 加载状态改变
@@ -186,6 +204,14 @@ export function goForward(tabId: number): void {
     return
   }
   view.webContents.navigationHistory.goForward()
+}
+
+export function navigateToUrl(tabId: number, url: string): void {
+  const view = tabs.find((tab) => tab.webContents.id === tabId)
+  if (!view) {
+    return
+  }
+  view.webContents.loadURL(url)
 }
 
 export function getTabs(): WebContentsView[] {

@@ -7,7 +7,7 @@ export interface TabAPI {
   refreshTab: (tabId: number) => void
   goBack: (tabId: number) => void
   goForward: (tabId: number) => void
-
+  navigateToUrl: (tabId: number, url: string) => void
   onCloseTab: (cb: (tabId: number) => void) => void
 
   onTabUrlChange: (cb: (tabId: number, url: string) => void) => void
@@ -35,6 +35,9 @@ export const tabsAPI: TabAPI = {
   },
   goForward: (tabId: number) => {
     return ipcRenderer.invoke('tab:goForward', tabId)
+  },
+  navigateToUrl: (tabId: number, url: string) => {
+    return ipcRenderer.invoke('tab:navigateToUrl', tabId, url)
   },
   onCloseTab: (cb: (tabId: number) => void) => {
     return ipcRenderer.on('tab:closeTab', (_, tabId: number) => {

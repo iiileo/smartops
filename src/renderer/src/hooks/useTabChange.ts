@@ -27,6 +27,7 @@ const useTabChange = (): void => {
       setTabLoading(tabId, loading)
     })
     window.tabs.onTabCanBackAndForwardChange((tabId, canBack, canForward) => {
+      console.log('onTabCanBackAndForwardChange', tabId, canBack, canForward)
       setTabCanBackAndForward(tabId, canBack, canForward)
     })
   }, [setTabUrl, setTabFavicon, setTabTitle, setTabLoading, setTabCanBackAndForward, closeTab])

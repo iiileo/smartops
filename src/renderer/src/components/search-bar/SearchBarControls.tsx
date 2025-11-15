@@ -27,9 +27,9 @@ const SearchBarControls: React.FC = (): React.ReactElement => {
   }
 
   return (
-    <div className="h-[28px] flex items-center gap-[8px]">
+    <div className="h-[32px] flex items-center gap-[8px]">
       <div
-        className={cn('h-full w-[28px] flex items-center justify-center hover:bg-gray-200 rounded-full', {
+        className={cn('h-full w-[32px] flex items-center justify-center hover:bg-gray-200 rounded-full', {
           'text-gray-400': !canBack
         })}
         onClick={handleGoBack}
@@ -37,7 +37,7 @@ const SearchBarControls: React.FC = (): React.ReactElement => {
         <ChevronLeft size={16} />
       </div>
       <div
-        className={cn('h-full w-[28px] flex items-center justify-center hover:bg-gray-200 rounded-full', {
+        className={cn('h-full w-[32px] flex items-center justify-center hover:bg-gray-200 rounded-full', {
           'text-gray-400': !canForward
         })}
         onClick={handleGoForward}
@@ -45,7 +45,7 @@ const SearchBarControls: React.FC = (): React.ReactElement => {
         <ChevronRight size={16} />
       </div>
       <div
-        className="h-full w-[28px] flex items-center justify-center hover:bg-gray-200 rounded-full"
+        className="h-full w-[32px] flex items-center justify-center hover:bg-gray-200 rounded-full"
         onClick={handleRefresh}
       >
         <RotateCw size={16} />

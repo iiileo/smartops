@@ -32,7 +32,7 @@ function ToolbarComponent(): React.ReactNode {
   }
   const renderSearchBar = (): React.ReactNode => {
     return (
-      <div className="h-[40px] w-full bg-white flex items-center border-b border-gray-200 px-[12px] search-bar-view py-[6px] gap-[8px]">
+      <div className="h-[40px] w-full bg-white flex items-center border-b border-gray-200 px-[12px] search-bar-view py-[4px] gap-[8px] box-border">
         {/* 控制器 */}
         <SearchBarControls />
         {/* 搜索栏 */}

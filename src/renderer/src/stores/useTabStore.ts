@@ -173,6 +173,7 @@ const useTabStore = create<TabState>((set) => ({
         if (index !== -1) {
           draft.tabs[index].canBack = canBack
           draft.tabs[index].canForward = canForward
+          draft.selectedTab = draft.tabs[index]
         }
       })
     )
