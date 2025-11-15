@@ -23,6 +23,10 @@ interface TabState {
   closeTab: (tabId: number) => void
   setSelectedTab: (tabId: number) => void
 
+  refreshTab: (tabId: number) => void
+  goBack: (tabId: number) => void
+  goForward: (tabId: number) => void
+
   setTabUrl: (tabId: number, url: string) => void
   setTabFavicon: (tabId: number, favicon: string) => void
   setTabTitle: (tabId: number, title: string) => void
@@ -79,12 +83,24 @@ const useTabStore = create<TabState>((set) => ({
       })
     )
   },
+  refreshTab: (tabId: number) => {
+    window.tabs.refreshTab(tabId)
+  },
+  goBack: (tabId: number) => {
+    window.tabs.goBack(tabId)
+  },
+  goForward: (tabId: number) => {
+    window.tabs.goForward(tabId)
+  },
   setTabUrl: (tabId: number, url: string) => {
+    console.log('setTabUrl', tabId, url)
     set(
       produce((draft) => {
         const index = draft.tabs.findIndex((tab: Tab) => tab.id === tabId)
+        console.log('setTabUrl index', index)
         if (index !== -1) {
           draft.tabs[index].url = url
+          draft.selectedTab = draft.tabs[index]
         }
       })
     )

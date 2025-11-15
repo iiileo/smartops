@@ -31,21 +31,35 @@ export async function createContentTab(url: string): Promise<WebContentsView | n
     view.webContents.on('did-fail-load', () => {
       resolve(null)
     })
+
+    // URL 改变
+    view.webContents.on('did-navigate', (_, url) => {
+      console.log('did-navigate', url)
+      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+    })
+    view.webContents.on('did-navigate-in-page', (_, url) => {
+      console.log('did-navigate-in-page', url)
+      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+    })
+    view.webContents.on('will-navigate', (_, url) => {
+      console.log('will-navigate', url)
+      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
+    })
+    // =====
+    // 加载状态改变
     view.webContents.on('did-start-loading', () => {
       toolbarView?.webContents.send('tab:loadingChange', view.webContents.id, true)
     })
     view.webContents.on('did-stop-loading', () => {
       toolbarView?.webContents.send('tab:loadingChange', view.webContents.id, false)
     })
-    view.webContents.on('did-navigate', (_, url) => {
-      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
-    })
-    view.webContents.on('did-navigate-in-page', (_, url) => {
-      toolbarView?.webContents.send('tab:urlChange', view.webContents.id, url)
-    })
+    // =====
+    // 标题改变
     view.webContents.on('page-title-updated', (_, title) => {
       toolbarView?.webContents.send('tab:titleChange', view.webContents.id, title)
     })
+    // =====
+    // favicon改变
     view.webContents.on('page-favicon-updated', async (_, favicon) => {
       console.log('page-favicon-updated', favicon)
       if (favicon.length > 0) {
@@ -56,8 +70,7 @@ export async function createContentTab(url: string): Promise<WebContentsView | n
         toolbarView?.webContents.send('tab:faviconChange', view.webContents.id, '')
       }
     })
-
-    // todo: 监听 view的事件传给 toolbar 比如 标题改变 url改变 title改变
+    // =====
 
     view.setBackgroundColor(getBackgroundColor())
     tabs.push(view)
@@ -149,6 +162,30 @@ export function closeTab(tabId: number): void {
   mainWindow.contentView.removeChildView(view)
   view.webContents.close()
   tabs.splice(tabs.indexOf(view), 1)
+}
+
+export function refreshTab(tabId: number): void {
+  const view = tabs.find((tab) => tab.webContents.id === tabId)
+  if (!view) {
+    return
+  }
+  view.webContents.reload()
+}
+
+export function goBack(tabId: number): void {
+  const view = tabs.find((tab) => tab.webContents.id === tabId)
+  if (!view) {
+    return
+  }
+  view.webContents.navigationHistory.goBack()
+}
+
+export function goForward(tabId: number): void {
+  const view = tabs.find((tab) => tab.webContents.id === tabId)
+  if (!view) {
+    return
+  }
+  view.webContents.navigationHistory.goForward()
 }
 
 export function getTabs(): WebContentsView[] {

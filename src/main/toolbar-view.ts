@@ -5,7 +5,7 @@ import { route } from './utils'
 
 let toolbarView: WebContentsView | null = null
 
-const TOOLBAR_VIEW_HEIGHT = 40
+const TOOLBAR_VIEW_HEIGHT = 80
 
 export function createToolbarView(): Promise<WebContentsView | null> {
   return new Promise((resolve) => {

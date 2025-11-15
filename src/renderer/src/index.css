@@ -11,6 +11,10 @@
     -webkit-app-region: no-drag;
 }
 
+.search-bar-view {
+    -webkit-app-region: no-drag;
+}
+
 .toolbar-btn-button-active::before {
     /* 左侧底部内凹圆角 */
     content: '';

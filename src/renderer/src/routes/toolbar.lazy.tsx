@@ -1,3 +1,5 @@
+import SearchBar from '@renderer/components/search-bar/SearchBar'
+import SearchBarControls from '@renderer/components/search-bar/SearchBarControls'
 import { Tabbar } from '@renderer/components/tabbar'
 import WindowControls from '@renderer/components/WindowControls'
 import useTabChange from '@renderer/hooks/useTabChange'
@@ -18,9 +20,9 @@ function ToolbarComponent(): React.ReactNode {
 
   const isWindow = platform === 'win32'
 
-  const Toolbar = (): React.ReactNode => {
+  const renderToolbar = (): React.ReactNode => {
     return (
-      <div className={cn('h-full w-full bg-blue-100 flex items-center')}>
+      <div className={cn('h-[40px] w-full bg-blue-100 flex items-center')}>
         <Tabbar />
         {/* spacer */}
         <div className="w-[90px]"></div>
@@ -28,9 +30,20 @@ function ToolbarComponent(): React.ReactNode {
       </div>
     )
   }
+  const renderSearchBar = (): React.ReactNode => {
+    return (
+      <div className="h-[40px] w-full bg-white flex items-center border-b border-gray-200 px-[12px] search-bar-view py-[6px] gap-[8px]">
+        {/* 控制器 */}
+        <SearchBarControls />
+        {/* 搜索栏 */}
+        <SearchBar />
+      </div>
+    )
+  }
   return (
     <div className="h-screen w-screen toolbar-view">
-      <Toolbar />
+      {renderToolbar()}
+      {renderSearchBar()}
     </div>
   )
 }

@@ -4,6 +4,11 @@ export interface TabAPI {
   addTab: (url: string) => Promise<number>
   setSelectedTab: (tabId: number) => void
   closeTab: (tabId: number) => void
+  refreshTab: (tabId: number) => void
+  goBack: (tabId: number) => void
+  goForward: (tabId: number) => void
+
+  onCloseTab: (cb: (tabId: number) => void) => void
 
   onTabUrlChange: (cb: (tabId: number, url: string) => void) => void
   onTabFaviconChange: (cb: (tabId: number, favicon: string) => void) => void
@@ -21,6 +26,20 @@ export const tabsAPI: TabAPI = {
   },
   closeTab: (tabId: number) => {
     return ipcRenderer.invoke('tab:closeTab', tabId)
+  },
+  refreshTab: (tabId: number) => {
+    return ipcRenderer.invoke('tab:refreshTab', tabId)
+  },
+  goBack: (tabId: number) => {
+    return ipcRenderer.invoke('tab:goBack', tabId)
+  },
+  goForward: (tabId: number) => {
+    return ipcRenderer.invoke('tab:goForward', tabId)
+  },
+  onCloseTab: (cb: (tabId: number) => void) => {
+    return ipcRenderer.on('tab:closeTab', (_, tabId: number) => {
+      cb(tabId)
+    })
   },
 
   onTabUrlChange: (cb: (tabId: number, url: string) => void) => {
